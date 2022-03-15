@@ -152,17 +152,15 @@ const Header = (props) => {
 
     function logoutHandler() {
         window.sessionStorage.removeItem("access-token");
-
     }
-
     function bookShowhandler() {
-        if (loggedIn === null) {
-            handleOpen();
+        if (window.sessionStorage.getItem('access-token') === null) {
+          handleOpen();
         } else {
-            props.history.push("/bookshow/" + props.match.params.id);
+          props.history.push("/bookshow/" + props.match.params.id);
         }
-
-    }
+    
+      }
 
     return (
         <div>
@@ -190,13 +188,13 @@ const Header = (props) => {
                     : ""
                 }
 
-                {props.showBookShowButton === "true" && (!loggedIn === null)
+                {props.showBookShowButton === "true" && (loggedIn !== null)
                     ? <div className="bookshow-button">
-                        <Link to={"/bookshow/" + props.id}>
-                            <Button variant="contained" color="primary">
+                        
+                            <Button variant="contained" color="primary" onClick={bookShowhandler}>
                                 Book Show
                             </Button>
-                        </Link>
+                       
                     </div>
                     : ""
                 }
