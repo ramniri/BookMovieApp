@@ -1,4 +1,4 @@
-import React,{useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import Header from '../../common/header/Header';
 import Typography from '@material-ui/core/Typography';
 import './Details.css';
@@ -9,18 +9,15 @@ import GridListTileBar from '@material-ui/core/GridListTileBar';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import { Link } from 'react-router-dom';
 
-const Details = (props) => {
-    
-    // const [rating, setRating] = useState(0);
-    // const [movie, setMovie] = useState({});
-    
 
-    const { classes } = props;
-    const [movie, setMovie] = useState("");
+
+const Details = (props) => {
+
+    
     const [posterUrl, setPosterUrl] = useState("");
     const [title, setTitle] = useState("");
     const [genres, setGenres] = useState([]);
-    const [duration, setDuration]= useState(0);
+    const [duration, setDuration] = useState(0);
     const [releaseDate, setRelaesedDate] = useState("");
     const [rating, setRating] = useState(0);
     const [storyLine, setStoryLine] = useState("");
@@ -28,7 +25,7 @@ const Details = (props) => {
     const [videoUrl, setVideoUrl] = useState("");
     const [starRating, setStarRating] = useState(0);
     const [artists, setArtists] = useState([]);
-   
+
     async function movieData() {
         const rawResponse = await fetch(props.baseUrl + "movies/" + props.match.params.id,
             {
@@ -38,31 +35,23 @@ const Details = (props) => {
                 },
             });
         const result = await rawResponse.json();
-        setMovie(result);
+        
         setPosterUrl(result.poster_url);
-    setTitle(result.title);
-    setGenres(result.genres);
-    setDuration(result.duration);
-    setRelaesedDate(result.release_date);
-    setRating(result.rating);
-    setStoryLine(result.storyline);
-    setWikiUrl(result.wiki_url);
-    setVideoUrl(result.trailer_url);
-    setArtists(result.artists);
-    
+        setTitle(result.title);
+        setGenres(result.genres);
+        setDuration(result.duration);
+        setRelaesedDate(result.release_date);
+        setRating(result.rating);
+        setStoryLine(result.storyline);
+        setWikiUrl(result.wiki_url);
+        setVideoUrl(result.trailer_url);
+        setArtists(result.artists);
     }
 
- 
     useEffect(() => {
         movieData();
-       
-    }, []);
 
-    const handleChange = (event) => {
-        const {
-            target: { value },
-        } = event;
-    };
+    }, []);
 
     const opts = {
         height: '390',
@@ -86,11 +75,11 @@ const Details = (props) => {
     function videoOnReady(e) {
         e.target.playVideoAt(10);
     };
-    
+
 
     return (
         <div className="details">
-            <Header id={props.match.params.id} baseUrl={props.baseUrl} showBookShowButton="true" {...props}/>
+            <Header id={props.match.params.id} baseUrl={props.baseUrl} showBookShowButton="true" />
             <div className="back">
                 <Typography>
                     <Link to="/">  &#60; Back to Home</Link>
@@ -140,25 +129,26 @@ const Details = (props) => {
                         <span className="bold">Rate this movie: </span>
                     </Typography>
                     <Typography>
-                    {[...Array(5)].map((star, i)=>{
-                            const ratingValue = i+1;
-                            return(
-                                <label key={i}>
+                        {[...Array(5)].map((star, i) => {
+                            const ratingValue = i + 1;
+                            return (
+                                <label key={i} className="icon-pointer">
                                     <input
-                                    type="radio"
-                                    name="rating"
-                                    value={ratingValue}
-                                    onClick={()=>setStarRating(ratingValue)} />
+                                        className="star"
+                                        type="radio"
+                                        name="rating"
+                                        value={ratingValue}
+                                        onClick={() => setStarRating(ratingValue)} />
 
-                                    <StarBorderIcon 
-                                    className="star"
-                                    fontSize="default"
-                                    htmlColor={(ratingValue <= starRating) ? "#ffff00":"#000000"} />
+                                    <StarBorderIcon
+                                        fontSize="default"
+                                        className={(ratingValue <= starRating) ? "star-yellow" : "star-black"}
+                                    />
                                 </label>
                             )
                         })}
-</Typography>
-                    <div className="bold marginBottom16 marginTop16">
+                    </Typography>
+                    <div className="bold marginTop16 marginBottom16">
                         <Typography>
                             <span className="bold">Artists:</span>
                         </Typography>
@@ -167,8 +157,7 @@ const Details = (props) => {
                         <GridList cellHeight={160} cols={2}>
                             {artists != null && artists.map(artist => (
                                 <GridListTile
-                                    className="gridTile" datat-value = {artist.wiki_url}
-                                    // onClick={artistClickHandler}
+                                    className="gridTile" datat-value={artist.wiki_url}
                                     key={artist.id}>
                                     <img src={artist.profile_url} alt={artist.first_name + " " + artist.last_name} />
                                     <GridListTileBar
@@ -181,7 +170,7 @@ const Details = (props) => {
                 </div>
             </div>
         </div>
-    )
+    );
 };
 
 export default Details;

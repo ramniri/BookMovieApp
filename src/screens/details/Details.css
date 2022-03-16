@@ -87,12 +87,17 @@
       margin-right: 32px;
     }
   }
-
-  .star{
+  .icon-pointer{
     cursor: pointer;
-    transition: color 200ms;
- }
-
+  }
   input[type="radio"]{
     display: none;
   }
+  .star-yellow{ 
+    color:yellow;
+  }
+  .star-blacks{
+    color:black;
+  }
+  
+  

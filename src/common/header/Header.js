@@ -15,22 +15,20 @@ import { Link } from 'react-router-dom';
 
 const customStyles = {
     content: {
-      top: '50%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      marginRight: '-50%',
-      transform: 'translate(-50%, -50%)',
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
     },
-  };
+};
 
 function TabPanel(props) {
-    const { children, value, index, ...other } = props;
-
     return (
         <Typography component="div" style={{ padding: 0, textAlign: 'center' }}>
-        {props.children}
-    </Typography>
+            {props.children}
+        </Typography>
     );
 }
 
@@ -42,14 +40,11 @@ TabPanel.propTypes = {
 
 const Header = (props) => {
 
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
-    const [value, setValue] = React.useState(0);
-    const [username, setUserName] = React.useState("");
-    const [reqUserName, setReqUserName] = React.useState("dispNone");
-    const [password, setPassword] = React.useState("");
-    const [reqPassword, setReqPassword] = React.useState("dispNone");
+    const [value, setValue] = useState(0);
+    const [username, setUserName] = useState("");
+    const [reqUserName, setReqUserName] = useState("dispNone");
+    const [password, setPassword] = useState("");
+    const [reqPassword, setReqPassword] = useState("dispNone");
     const [reqFirstName, setReqFirstName] = useState("dispNone");
     const [reqLastName, setReqLastName] = useState("dispNone");
     const [reqEmail, setReqEmail] = useState("dispNone");
@@ -61,9 +56,9 @@ const Header = (props) => {
     const [regPassword, setRegPassword] = useState("");
     const [contactNo, setContactNo] = useState("");
     const [message, setMessage] = useState("");
-     const [modalIsOpen, setIsOpen] = React.useState(false);
+    const [modalIsOpen, setIsOpen] = useState(false);
 
-     let loggedIn =window.sessionStorage.getItem("access-token");
+    let loggedIn = window.sessionStorage.getItem("access-token");
     function openModal() {
         setIsOpen(true);
     }
@@ -72,7 +67,7 @@ const Header = (props) => {
     };
     function closeModal() {
         setIsOpen(false);
-      }
+    }
 
     async function registerHandler() {
         firstName === "" ? setReqFirstName("dispBlock") : setReqFirstName("dispNone");
@@ -118,14 +113,13 @@ const Header = (props) => {
 
         }
 
-
     }
 
     async function loginHandler() {
-        username === "" ? setReqUserName("dispBlock" ) : setReqUserName("dispNone");
+        username === "" ? setReqUserName("dispBlock") : setReqUserName("dispNone");
         password === "" ? setReqPassword("dispBlock") : setReqPassword("dispNone");
-        if(username === "" || password ===""){
-            return ;
+        if (username === "" || password === "") {
+            return;
         }
 
         try {
@@ -143,7 +137,7 @@ const Header = (props) => {
                 window.sessionStorage.setItem('access-token', rawResponse.headers.get('access-token'));
                 loggedIn = window.sessionStorage.getItem("access-token");
                 closeModal();
-                
+
             }
         } catch (error) {
 
@@ -153,14 +147,6 @@ const Header = (props) => {
     function logoutHandler() {
         window.sessionStorage.removeItem("access-token");
     }
-    function bookShowhandler() {
-        if (window.sessionStorage.getItem('access-token') === null) {
-          handleOpen();
-        } else {
-          props.history.push("/bookshow/" + props.match.params.id);
-        }
-    
-      }
 
     return (
         <div>
@@ -190,11 +176,11 @@ const Header = (props) => {
 
                 {props.showBookShowButton === "true" && (loggedIn !== null)
                     ? <div className="bookshow-button">
-                        
-                            <Button variant="contained" color="primary" onClick={bookShowhandler}>
+                        <Link to={"/bookshow/" + props.id}>
+                            <Button variant="contained" color="primary">
                                 Book Show
                             </Button>
-                       
+                        </Link>
                     </div>
                     : ""
                 }
@@ -226,7 +212,7 @@ const Header = (props) => {
                             <InputLabel htmlFor="loginPassword">Password</InputLabel>
                             <Input id="loginPassword" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                             <FormHelperText className={reqPassword}>
-                                <span className="red">{!username === null && password ===null?"Please Enter Your Password":"required"}</span>
+                                <span className="red">{username !== null && password === null ? "Please Enter Your Password" : "required"}</span>
                             </FormHelperText>
                         </FormControl>
                         <br /><br />

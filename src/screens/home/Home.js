@@ -1,4 +1,4 @@
-import React,{useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import './Home.css';
 import Header from '../../common/header/Header';
 import { withStyles } from '@material-ui/core/styles';
@@ -36,8 +36,7 @@ const styles = theme => ({
         width: '100%'
     },
     gridListMain: {
-        transform: 'translateZ(0)',
-        cursor: 'pointer'
+        transform: 'translateZ(0)'
     },
     formControl: {
         margin: theme.spacing.unit,
@@ -61,58 +60,50 @@ const Home = (props) => {
     const [artistsList, setArtistsList] = useState([]);
     const [releaseDateStart, setReleaseDateStart] = useState("");
     const [releaseDateEnd, setReleaseDateEnd] = useState("");
-    const [movieId, setMovieId] = useState("");
 
- 
-     
-    async function publishedMovies(){
-        const rawResponse = await fetch(props.baseUrl+"movies?status=PUBLISHED");
+
+    async function publishedMovies() {
+        const rawResponse = await fetch(props.baseUrl + "movies?status=PUBLISHED");
         const result = await rawResponse.json();
-        // const dataArr = result.movies;
-        console.log(result.movies);
         setUpComingMovies(result.movies);
     }
 
-    async function ReleasedMovies(){
-        const rawResponse = await fetch(props.baseUrl+"movies?status=RELEASED");
+    async function ReleasedMovies() {
+        const rawResponse = await fetch(props.baseUrl + "movies?status=RELEASED");
         const result = await rawResponse.json();
-        // const dataArr = result.movies;
-        console.log(result.movies);
         setReleasedMovies(result.movies);
     }
 
-    async function Genres(){
-        const rawResponse = await fetch(props.baseUrl+"genres");
+    async function Genres() {
+        const rawResponse = await fetch(props.baseUrl + "genres");
         const result = await rawResponse.json();
-        console.log(result.genres);
         setGenresList(result.genres);
     }
 
-    async function Artists(){
-        const rawResponse = await fetch(props.baseUrl+"artists");
+    async function Artists() {
+        const rawResponse = await fetch(props.baseUrl + "artists");
         const result = await rawResponse.json();
-console.log(result.artists);
         setArtistsList(result.artists);
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         publishedMovies();
         ReleasedMovies();
         Genres();
         Artists();
-    },[]);
+    }, []);
 
-    
+
     const movieNameChangeHandler = event => {
-        setMovieName( event.target.value );
+        setMovieName(event.target.value);
     }
 
     const genreSelectHandler = event => {
-        setGenres(event.target.value );
+        setGenres(event.target.value);
     }
 
     const artistSelectHandler = event => {
-        setArtists(event.target.value );
+        setArtists(event.target.value);
     }
 
     const releaseDateStartHandler = event => {
@@ -122,8 +113,6 @@ console.log(result.artists);
     const releaseDateEndHandler = event => {
         setReleaseDateEnd(event.target.defaultValue);
     }
-    
-    
 
     async function filterApplyHandler() {
         let queryString = "?status=RELEASED";
@@ -144,127 +133,125 @@ console.log(result.artists);
         }
 
 
-        const rawResponse = await fetch(props.baseUrl+"movies" + encodeURI(queryString));
+        const rawResponse = await fetch(props.baseUrl + "movies" + encodeURI(queryString));
         const result = await rawResponse.json();
-        // const dataArr = result.movies;
         setReleasedMovies(result.movies);
     }
-    
-return(
-    <div>
-    <Header baseUrl={props.baseUrl} />
 
-    <div className={classes.upcomingMoviesHeading}>
-        <span>Upcoming Movies</span>
-    </div>
+    return (
+        <div>
+            <Header baseUrl={props.baseUrl} />
 
-    <GridList cols={6} className={classes.gridListUpcomingMovies} >
-        {upcomingMovies.map(movie => (
-            <GridListTile key={"upcoming" + movie.id} style={{height:250}}>
-                <img src={movie.poster_url} className="movie-poster" alt={movie.title} />
-                <GridListTileBar title={movie.title} />
-            </GridListTile>
-        ))}
-    </GridList>
+            <div className={classes.upcomingMoviesHeading}>
+                <span>Upcoming Movies</span>
+            </div>
 
-    <div className="flex-container">
-        <div className="left">
-            <GridList cellHeight={350} cols={4} className={classes.gridListMain}>
-                {releasedMovies.map(movie => (
-                    <GridListTile  onClick={() =>{props.match.params.id = movie.id; props.history.push("/movie/" + props.match.params.id)}} className="released-movie-grid-item" key={"grid" + movie.id}>
-                        <img src={movie.poster_url}  className="movie-poster" alt={movie.title} />
-                        <GridListTileBar
-                            title={movie.title}
-                            subtitle={<span>Release Date: {new Date(movie.release_date).toDateString()}</span>}
-                        />
+            <GridList cols={6} className={classes.gridListUpcomingMovies} >
+                {upcomingMovies.map(movie => (
+                    <GridListTile key={"upcoming" + movie.id} cellHeight={250}>
+                        <img src={movie.poster_url} className="movie-poster" alt={movie.title} />
+                        <GridListTileBar title={movie.title} />
                     </GridListTile>
                 ))}
             </GridList>
-        </div>
-        <div className="right">
-            <Card>
-                <CardContent>
-                    <FormControl className={classes.formControl}>
-                        <Typography className={classes.title} color="textSecondary">
-                            FIND MOVIES BY:
-                        </Typography>
-                    </FormControl>
 
-                    <FormControl className={classes.formControl}>
-                        <InputLabel htmlFor="movieName">Movie Name</InputLabel>
-                        <Input id="movieName" value={movieName} onChange={movieNameChangeHandler} />
-                    </FormControl>
+            <div className="flex-container">
+                <div className="left">
+                    <GridList cellHeight={350} cols={4} className={classes.gridListMain}>
+                        {releasedMovies.map(movie => (
+                            <GridListTile onClick={() => { props.history.push("/movie/" + movie.id) }} className="released-movie-grid-item" key={"grid" + movie.id}>
+                                <img src={movie.poster_url} className="movie-poster" alt={movie.title} />
+                                <GridListTileBar
+                                    title={movie.title}
+                                    subtitle={<span>Release Date: {new Date(movie.release_date).toDateString()}</span>}
+                                />
+                            </GridListTile>
+                        ))}
+                    </GridList>
+                </div>
+                <div className="right">
+                    <Card>
+                        <CardContent>
+                            <FormControl className={classes.formControl}>
+                                <Typography className={classes.title} color="textSecondary">
+                                    FIND MOVIES BY:
+                                </Typography>
+                            </FormControl>
 
-                    <FormControl className={classes.formControl}>
-                        <InputLabel htmlFor="select-multiple-checkbox">Genres</InputLabel>
-                        <Select
-                            multiple
-                            input={<Input id="select-multiple-checkbox-genre" />}
-                            renderValue={selected => selected.join(',')}
-                            value={genres}
-                            onChange={genreSelectHandler}
-                        >
-                            {genresList.map(genre => (
-                                <MenuItem key={genre.id} value={genre.genre}>
-                                    <Checkbox checked={genres.indexOf(genre.genre) > -1} />
-                                    <ListItemText primary={genre.genre} />
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+                            <FormControl className={classes.formControl}>
+                                <InputLabel htmlFor="movieName">Movie Name</InputLabel>
+                                <Input id="movieName" value={movieName} onChange={movieNameChangeHandler} />
+                            </FormControl>
 
-                    <FormControl className={classes.formControl}>
-                        <InputLabel htmlFor="select-multiple-checkbox">Artists</InputLabel>
-                        <Select
-                            multiple
-                            input={<Input id="select-multiple-checkbox" />}
-                            renderValue={selected => selected.join(',')}
-                            value={artists}
-                            onChange={artistSelectHandler}
-                        >
-                            {artistsList.map(artist => (
-                                <MenuItem key={artist.id} value={artist.first_name + " " + artist.last_name}>
-                                    <Checkbox checked={artists.indexOf(artist.first_name + " " + artist.last_name) > -1} />
-                                    <ListItemText primary={artist.first_name + " " + artist.last_name} />
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+                            <FormControl className={classes.formControl}>
+                                <InputLabel htmlFor="select-multiple-checkbox">Genres</InputLabel>
+                                <Select
+                                    multiple
+                                    input={<Input id="select-multiple-checkbox-genre" />}
+                                    renderValue={selected => selected.join(',')}
+                                    value={genres}
+                                    onChange={genreSelectHandler}
+                                >
+                                    {genresList.map(genre => (
+                                        <MenuItem key={genre.id} value={genre.genre}>
+                                            <Checkbox checked={genres.indexOf(genre.genre) > -1} />
+                                            <ListItemText primary={genre.genre} />
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
 
-                    <FormControl className={classes.formControl}>
-                        <TextField
-                            id="releaseDateStart"
-                            label="Release Date Start"
-                            type="date"
-                            defaultValue=""
-                            InputLabelProps={{ shrink: true }}
-                            onChange={releaseDateStartHandler}
-                        />
-                    </FormControl>
+                            <FormControl className={classes.formControl}>
+                                <InputLabel htmlFor="select-multiple-checkbox">Artists</InputLabel>
+                                <Select
+                                    multiple
+                                    input={<Input id="select-multiple-checkbox" />}
+                                    renderValue={selected => selected.join(',')}
+                                    value={artists}
+                                    onChange={artistSelectHandler}
+                                >
+                                    {artistsList.map(artist => (
+                                        <MenuItem key={artist.id} value={artist.first_name + " " + artist.last_name}>
+                                            <Checkbox checked={artists.indexOf(artist.first_name + " " + artist.last_name) > -1} />
+                                            <ListItemText primary={artist.first_name + " " + artist.last_name} />
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
 
-                    <FormControl className={classes.formControl}>
-                        <TextField
-                            id="releaseDateEnd"
-                            label="Release Date End"
-                            type="date"
-                            defaultValue=""
-                            InputLabelProps={{ shrink: true }}
-                            onChange={releaseDateEndHandler}
-                        />
-                    </FormControl>
-                    <br /><br />
-                    <FormControl className={classes.formControl}>
-                        <Button onClick={filterApplyHandler} variant="contained" color="primary">
-                            APPLY
-                        </Button>
-                    </FormControl>
-                </CardContent>
-            </Card>
-        </div>
-    </div>
-</div >
-)
+                            <FormControl className={classes.formControl}>
+                                <TextField
+                                    id="releaseDateStart"
+                                    label="Release Date Start"
+                                    type="date"
+                                    defaultValue=""
+                                    InputLabelProps={{ shrink: true }}
+                                    onChange={releaseDateStartHandler}
+                                />
+                            </FormControl>
 
+                            <FormControl className={classes.formControl}>
+                                <TextField
+                                    id="releaseDateEnd"
+                                    label="Release Date End"
+                                    type="date"
+                                    defaultValue=""
+                                    InputLabelProps={{ shrink: true }}
+                                    onChange={releaseDateEndHandler}
+                                />
+                            </FormControl>
+                            <br /><br />
+                            <FormControl className={classes.formControl}>
+                                <Button onClick={filterApplyHandler} variant="contained" color="primary">
+                                    APPLY
+                                </Button>
+                            </FormControl>
+                        </CardContent>
+                    </Card>
+                </div>
+            </div>
+        </div >
+    );
 };
 
 export default withStyles(styles)(Home);
